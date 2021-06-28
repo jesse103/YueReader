@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import os
 
 base_url = 'https://lightnovel.world' # Site URL
 
@@ -62,3 +63,23 @@ def get_chapter_content(url):
     for br in content.find_all('br'):
         br.replace_with('\n')
     return content.text
+
+def download_chapters(title, chapters):
+    if not os.path.exists('downloads'):
+        os.mkdir('downloads') 
+    book_path = f'downloads/{title}'
+    print(book_path)
+    if os.path.exists(book_path):
+        for f in os.listdir(book_path):
+            os.remove(os.path.join(book_path, f))
+    else:
+        os.mkdir(book_path)
+    i = 0
+    for chapter in chapters:
+        i += 1
+        print(f'Downloading chapter {i}..')
+        content = get_chapter_content(chapter['link'])
+        f = open(f'{book_path}/{i}.txt', 'w', encoding='utf-8')
+        f.write(content)
+        f.close()
+    print(f'Downloaded all chapters for {title}!')

@@ -1,5 +1,5 @@
 from colorama import Fore, Style
-from os import system
+import os
 
 import utils
 import bookmark_handler
@@ -26,22 +26,27 @@ def read_input(title, chapters, bookmarked):
 
 def book_input(title, chapters, bookmarked):
     print('\n=- Options -=')
-    options = ['1. Read', f'2. {"Remove Bookmark" if bookmarked else "Bookmark"}', '3. Exit']
+    options = ['1. Read', f'2. {"Remove Bookmark" if bookmarked else "Bookmark"}', '3. Download', '4. Exit']
     print('\n'.join(options))
     try:
         option = int(input('> '))
+        print(option)
         if option == 1:
-            return read_input(title, chapters, bookmarked)
+            read_input(title, chapters, bookmarked)
         elif option == 2:
             if bookmarked:
                 bookmark_handler.remove_bookmark(title)
             else:
                 bookmark_handler.add_bookmark(title)
         elif option == 3:
+            books.download_chapters(title, chapters)
+        elif option == 4:
             return
+    
         else:
             book_input(title, chapters, bookmarked)
-    except:
+    except Exception as err:
+        print(err)
         book_input(title, chapters, bookmarked)
 
 def book_menu(data):
@@ -135,5 +140,5 @@ def main():
     main()
     
 
-system('')
+os.system('')
 main()

@@ -11,5 +11,8 @@ All you have to do now is install the requirements needed:
 
 Now, you can open `main.py`!
 
+# Pull Requests
+Any pull requests are highly appreciated!
+
 # Sites in use
 https://lightnovel.world

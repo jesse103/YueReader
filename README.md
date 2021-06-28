@@ -1,4 +1,4 @@
-!(Moon)[images/moon.png]
+![Moon](images/moon.png)
 
 # Yuè Reader
 Yuè Reader is a cross-platform in-terminal cn/jp/ko webnovel reader.

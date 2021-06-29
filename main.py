@@ -177,7 +177,7 @@ def discord_rpc():
             else:
                 rpc.update(state="Idle", large_image='moon')
             sleep(10)
-    finally:
+    except:
         pass
     
 

@@ -13,12 +13,22 @@ commands = {
     'next': {
         'info': 'Goes to the next chapter if it exists.',
         'returns': True
+    },
+    'prev': {
+        'info': 'Goes to the previous chapter if it exists.',
+        'returns': True
     }
 }
 
 def handle_command(book, chapter, command): # TODO: command handler
     if command == 'next':
-        read(book, book.chapters[chapter.number])
+        if chapter.number < book.chapter_count:
+            next_chapter = book.chapters[chapter.number]
+            read(book, next_chapter)
+    elif command == 'prev':
+        if (chapter.number-2) > 0:
+            previous_chapter = book.chapters[chapter.number-2]
+            read(book, previous_chapter)
 
 def read(book, chapter):
     utils.clear_screen()

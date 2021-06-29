@@ -1,12 +1,17 @@
-from colorama import Fore
 import os
-
 import utils
 import bookmark_handler
 import progress_handler
 import reader
+import threading
+import asyncio
 
+from colorama import Fore
+from pypresence import Presence
 from books import Book
+from time import sleep
+
+discord_thread = None
 
 def read_input(book):
     utils.clear_screen()
@@ -156,7 +161,30 @@ def main():
     except:
         pass
     main()
+
+def discord_rpc():
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    try:
+        client_id = 859508506687176764 # YueReader
+        rpc = Presence(client_id)
+        rpc.connect() # Connect to discord
+
+        while True:
+            if reader.ReadingStatus.chapter:
+                book = reader.ReadingStatus.book
+                chapter = reader.ReadingStatus.chapter
+                rpc.update(state=f'Reading {book.title} - {chapter.title}', large_image='moon')
+            else:
+                rpc.update(state="Idle", large_image='moon')
+            sleep(10)
+    finally:
+        pass
     
 
 os.system('')
+
+discord_thread = threading.Thread(target=discord_rpc) # Discord Rich Presence support, feel free to remove
+discord_thread.daemon = True
+discord_thread.start()
+
 main()

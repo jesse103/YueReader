@@ -5,6 +5,10 @@ from colorama import Fore
 
 max_on_screen = 5
 
+class ReadingStatus:
+    book = None
+    chapter = None
+
 def handle_command(book, chapter, command): # TODO: command handler]
     pass
 
@@ -14,6 +18,9 @@ def read(book, chapter):
     print(utils.center_text('Press enter to scroll down, or type \'exit\' to go back.'))
 
     try:
+
+        ReadingStatus.book = book
+        ReadingStatus.chapter = chapter
 
         content = chapter.get_content()
 
@@ -28,6 +35,8 @@ def read(book, chapter):
             if index >= max_on_screen:
                 s = input()
                 if s == 'exit':
+                    ReadingStatus.chapter = None
+                    ReadingStatus.book = None
                     return
                 else:
                     handle_command(book, chapter, s)

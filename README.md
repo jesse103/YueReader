@@ -15,10 +15,10 @@ Any pull requests are highly appreciated!
 # Setup
 First, install python 3.x if you haven't already. [Tutorial](https://realpython.com/installing-python/)
 
-All you have to do now is install the requirements needed:
+All you have to do now is install the packages needed:
 > pip install -r requirements.txt
 
-Now you can open `main.py`!
+Now you can run `main.py`!
 
 # To-Do
 - [ ] Clean codebase, add more comments

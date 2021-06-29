@@ -9,16 +9,25 @@ class ReadingStatus:
     book = None
     chapter = None
 
-def handle_command(book, chapter, command): # TODO: command handler]
-    pass
+commands = {
+    'next': {
+        'info': 'Goes to the next chapter if it exists.',
+        'returns': True
+    }
+}
+
+def handle_command(book, chapter, command): # TODO: command handler
+    if command == 'next':
+        read(book, book.chapters[chapter.number])
 
 def read(book, chapter):
     utils.clear_screen()
 
     print(utils.center_text('Press enter to scroll down, or type \'exit\' to go back.'))
-
+    
     try:
-
+        done = False
+        
         ReadingStatus.book = book
         ReadingStatus.chapter = chapter
 
@@ -33,13 +42,20 @@ def read(book, chapter):
             print(utils.center_text(chapter.title))
         for line in content.split('\n'):
             if index >= max_on_screen:
-                s = input()
-                if s == 'exit':
+                command = input()
+                if command == 'exit':
                     ReadingStatus.chapter = None
                     ReadingStatus.book = None
                     return
-                else:
-                    handle_command(book, chapter, s)
+                elif len(command) > 1:
+                    try:
+                        command_data = commands[command]
+                        if command_data['returns']: # bad little hack here, fix and ily
+                            return handle_command(book, chapter, command)
+                        else:
+                            handle_command(book, chapter, command)
+                    except:
+                        pass
                 index = 0
             index += 1
             print(utils.center_text(line))

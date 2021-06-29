@@ -67,13 +67,15 @@ def get_chapter_content(url):
 def download_chapters(title, chapters):
     if not os.path.exists('downloads'):
         os.mkdir('downloads') 
+
     book_path = f'downloads/{title}'
-    print(book_path)
+
     if os.path.exists(book_path):
         for f in os.listdir(book_path):
             os.remove(os.path.join(book_path, f))
     else:
         os.mkdir(book_path)
+
     i = 0
     for chapter in chapters:
         i += 1
@@ -82,4 +84,4 @@ def download_chapters(title, chapters):
         f = open(f'{book_path}/{i}.txt', 'w', encoding='utf-8')
         f.write(content)
         f.close()
-    print(f'Downloaded all chapters for {title}!')
+    print(f'Downloaded all chapters for [{title}]!')

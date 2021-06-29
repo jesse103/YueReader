@@ -1,4 +1,4 @@
-from colorama import Fore, Style
+from colorama import Fore
 import os
 
 import utils
@@ -8,6 +8,29 @@ import reader
 import books
 
 def read_input(title, chapters, bookmarked):
+    utils.clear_screen()
+
+    chapters_read = progress_handler.get_read(title)
+
+    try:
+        if chapters_read > 0:
+            print(utils.color_text(f'[{title}]', Fore.LIGHTBLUE_EX))
+            print('\n'.join(['1. Resume Reading', '2. Pick Chapter']))
+            option = int(input('> '))
+            if option == 1:
+                chapter = chapters[chapters_read-1]
+                content = books.get_chapter_content(chapter['link'])
+                reader.read(title, chapter, chapters, content)
+                return
+            else:
+                pass
+    except:
+        read_input()
+        return
+
+    utils.clear_screen()
+
+    print(utils.color_text(f'[{title}]', Fore.LIGHTBLUE_EX))
     print('Enter a chapter number, or type \'exit\' to exit.')
 
     option = input('> ')
@@ -28,6 +51,7 @@ def book_input(title, chapters, bookmarked):
     print('\n=- Options -=')
     options = ['1. Read', f'2. {"Remove Bookmark" if bookmarked else "Bookmark"}', '3. Download', '4. Exit']
     print('\n'.join(options))
+
     try:
         option = int(input('> '))
         print(option)
@@ -42,11 +66,9 @@ def book_input(title, chapters, bookmarked):
             books.download_chapters(title, chapters)
         elif option == 4:
             return
-    
         else:
             book_input(title, chapters, bookmarked)
-    except Exception as err:
-        print(err)
+    except:
         book_input(title, chapters, bookmarked)
 
 def book_menu(data):
@@ -61,7 +83,7 @@ def book_menu(data):
 
     # Book Info
     print(f'=- Book Info -=\
-    \nTitle: {utils.color_text(title, Fore.CYAN)} \
+    \nTitle: {utils.color_text(title, Fore.LIGHTBLUE_EX)} \
     \nChapters: {utils.color_text(len(chapters), Fore.GREEN)} \
     \nProgress: {utils.color_text(f"{chapters_read}/{len(chapters)}", Fore.GREEN)}')
 
@@ -92,7 +114,7 @@ def bookmark_menu():
                     return bookmark_input()
         bookmark_input()
     else:
-        print('You don\'t have any bookmarks :(')
+        print('You don\'t have any bookmarks! :(')
         return main()
 
 def search_menu():
@@ -125,18 +147,22 @@ def main():
 
     options = ['1. Search Book', '2. Bookmarks', '3. Exit']
     print('\n'.join(options))
-    option = int(input('> '))
 
-    utils.clear_screen()
+    try:
+        option = int(input('> '))
 
-    if option == 1:
-        search_menu()
-    elif option == 2:
-        bookmark_menu()
-    elif option == 3:
-        exit(1)
-    else:
         utils.clear_screen()
+
+        if option == 1:
+            search_menu()
+        elif option == 2:
+            bookmark_menu()
+        elif option == 3:
+            exit()
+        else:
+            utils.clear_screen()
+    except:
+        pass
     main()
     
 

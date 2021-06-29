@@ -2,7 +2,7 @@
 
 # Yuè Reader
 Yuè Reader is a cross-platform in-terminal cn/jp/ko webnovel reader.
-
+Any pull requests are highly appreciated!
 [Discord Server](https://discord.gg/vsJMcPdVBt)
 
 # Setup
@@ -13,8 +13,9 @@ All you have to do now is install the requirements needed:
 
 Now you can open `main.py`!
 
-# Pull Requests
-Any pull requests are highly appreciated!
+# To-Do
+- [ ] Clean codebase, add more comments
+- [ ] Reader commands
 
 # Sites in use
 https://lightnovel.world

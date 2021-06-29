@@ -75,8 +75,6 @@ def book_menu(book):
 
     chapters_read = progress_handler.get_read(book.title)
 
-    bookmarked = bookmark_handler.is_bookmarked(book.title, bookmark_handler.get_bookmarks())
-
     # Book Info
     print(f'=- Book Info -=\
     \nTitle: {utils.color_text(book.title, Fore.LIGHTBLUE_EX)} \

@@ -1,35 +1,41 @@
 import utils
-import shutil
 import progress_handler
-import books
 
 from colorama import Fore
 
 max_on_screen = 5
 
-def read(title, chapter, chapter_list, content):
+def handle_command(book, chapter, command): # TODO: command handler]
+    pass
+
+def read(book, chapter):
     utils.clear_screen()
 
-    print(utils.color_text('Press any key to scroll down, or type \'exit\' to go back.', Fore.LIGHTCYAN_EX))
+    print(utils.center_text('Press enter to scroll down, or type \'exit\' to go back.'))
 
     try:
-        number = chapter['number']
 
-        progress_handler.read_chapter(title, chapter['number'])
+        content = chapter.get_content()
+
+        number = chapter.number
+
+        progress_handler.read_chapter(book.title, number)
 
         index = 0
-        if not chapter['title'] in content:
-            print(utils.center_text(chapter['title']))
+        if not chapter.title in content:
+            print(utils.center_text(chapter.title))
         for line in content.split('\n'):
             if index >= max_on_screen:
                 s = input()
                 if s == 'exit':
                     return
+                else:
+                    handle_command(book, chapter, s)
                 index = 0
             index += 1
             print(utils.center_text(line))
-        if number != (len(chapter_list)-1):
-            next_chapter = chapter_list[number]
-            read(title, next_chapter, chapter_list, books.get_chapter_content(next_chapter['link']))
+        if number != (book.chapter_count-1):
+            next_chapter = book.chapters[number]
+            read(book, next_chapter)
     except:
-        print('nooo')
+        pass

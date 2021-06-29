@@ -5,22 +5,22 @@ import utils
 import bookmark_handler
 import progress_handler
 import reader
-import books
 
-def read_input(title, chapters, bookmarked):
+from books import Book
+
+def read_input(book):
     utils.clear_screen()
 
-    chapters_read = progress_handler.get_read(title)
+    chapters_read = progress_handler.get_read(book.title)
 
     try:
         if chapters_read > 0:
-            print(utils.color_text(f'[{title}]', Fore.LIGHTBLUE_EX))
+            print(utils.color_text(f'[{book.title}]', Fore.LIGHTBLUE_EX))
             print('\n'.join(['1. Resume Reading', '2. Pick Chapter']))
             option = int(input('> '))
             if option == 1:
-                chapter = chapters[chapters_read-1]
-                content = books.get_chapter_content(chapter['link'])
-                reader.read(title, chapter, chapters, content)
+                chapter = book.chapters[chapters_read-1]
+                reader.read(book, chapter)
                 return
             else:
                 pass
@@ -30,64 +30,60 @@ def read_input(title, chapters, bookmarked):
 
     utils.clear_screen()
 
-    print(utils.color_text(f'[{title}]', Fore.LIGHTBLUE_EX))
+    print(utils.color_text(f'[{book.title}]', Fore.LIGHTBLUE_EX))
     print('Enter a chapter number, or type \'exit\' to exit.')
 
     option = input('> ')
 
     try:
         number = int(option)
-        if number <= len(chapters) and number > 0:
-            chapter = chapters[number-1]
-            content = books.get_chapter_content(chapter['link'])
-            reader.read(title, chapter, chapters, content)
+        if number <= book.chapter_count and number > 0:
+            chapter = book.chapters[number-1]
+            reader.read(book, chapter)
     except:
         if option == 'exit':
-            return book_input(title, chapters, bookmarked)
+            return book_input(book)
         else:
-            return read_input(title, chapters, bookmarked)
+            return read_input(book)
 
-def book_input(title, chapters, bookmarked):
+def book_input(book):
     print('\n=- Options -=')
-    options = ['1. Read', f'2. {"Remove Bookmark" if bookmarked else "Bookmark"}', '3. Download', '4. Exit']
+    options = ['1. Read', f'2. {"Remove Bookmark" if book.bookmarked else "Bookmark"}', '3. Download', '4. Exit']
     print('\n'.join(options))
 
     try:
         option = int(input('> '))
         print(option)
         if option == 1:
-            read_input(title, chapters, bookmarked)
+            read_input(book)
         elif option == 2:
-            if bookmarked:
-                bookmark_handler.remove_bookmark(title)
+            if book.bookmarked:
+                bookmark_handler.remove_bookmark(book.title)
             else:
-                bookmark_handler.add_bookmark(title)
+                bookmark_handler.add_bookmark(book.title)
         elif option == 3:
-            books.download_chapters(title, chapters)
+            book.download_chapters()
         elif option == 4:
             return
         else:
-            book_input(title, chapters, bookmarked)
+            book_input(book)
     except:
-        book_input(title, chapters, bookmarked)
+        book_input(book)
 
-def book_menu(data):
+def book_menu(book):
     utils.clear_screen()
 
-    title = data['title']
-    chapters = books.get_chapters(data['link'])
+    chapters_read = progress_handler.get_read(book.title)
 
-    chapters_read = progress_handler.get_read(title)
-
-    bookmarked = bookmark_handler.is_bookmarked(title, bookmark_handler.get_bookmarks())
+    bookmarked = bookmark_handler.is_bookmarked(book.title, bookmark_handler.get_bookmarks())
 
     # Book Info
     print(f'=- Book Info -=\
-    \nTitle: {utils.color_text(title, Fore.LIGHTBLUE_EX)} \
-    \nChapters: {utils.color_text(len(chapters), Fore.GREEN)} \
-    \nProgress: {utils.color_text(f"{chapters_read}/{len(chapters)}", Fore.GREEN)}')
+    \nTitle: {utils.color_text(book.title, Fore.LIGHTBLUE_EX)} \
+    \nChapters: {utils.color_text(book.chapter_count, Fore.GREEN)} \
+    \nProgress: {utils.color_text(f"{chapters_read}/{book.chapter_count}", Fore.GREEN)}')
 
-    book_input(title, chapters, bookmarked)
+    book_input(book)
     
 
 def bookmark_menu():
@@ -105,26 +101,24 @@ def bookmark_menu():
                 option = int(option)
                 if option <= len(bookmarks) and option > 0:
                     utils.clear_screen()
-                    return book_menu(books.search_title(bookmarks[option-1]['title']))
+                    book_menu(Book(bookmarks[option-1]['title']))
             except:
                 if option == 'exit':
-                    utils.clear_screen()
-                    return main()
+                    pass
                 else:
-                    return bookmark_input()
+                    bookmark_input()
         bookmark_input()
     else:
         print('You don\'t have any bookmarks! :(')
-        return main()
 
 def search_menu():
     print(utils.color_text('Search Books', Fore.LIGHTYELLOW_EX))
     title = input('title> ')
 
     try:
-        data = books.search_title(title)
-        if data != None:
-            book_menu(data)
+        book = Book(title)
+        if book.valid:
+            book_menu(book)
         else:
             print('Book not found!')
             search_menu()
@@ -158,7 +152,7 @@ def main():
         elif option == 2:
             bookmark_menu()
         elif option == 3:
-            exit()
+            return
         else:
             utils.clear_screen()
     except:

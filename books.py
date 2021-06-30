@@ -2,6 +2,8 @@ from bs4 import BeautifulSoup
 import requests
 import os
 import bookmark_handler
+import utils
+import time
 
 base_url = 'https://lightnovel.world' # Site URL
 
@@ -41,16 +43,26 @@ class Book:
         else:
             os.mkdir(book_path)
 
-        i = 1
         for chapter in self.chapters:
-            print(f'Downloading chapter {i}..')
+            print(f'Downloading chapter {chapter.number}..')
             content = chapter.get_content()
-            f = open(f'{book_path}/{i}.txt', 'w', encoding='utf-8')
+            f = open(f'{book_path}/{chapter.number}.txt', 'w', encoding='utf-8')
             f.write(content)
             f.close()
-            i += 1
         print(f'Downloaded all chapters for [{self.title}]!')
-
+    
+    def list_chapters(self):
+        utils.clear_screen()
+        print(utils.center_text('Press enter to scroll down, or type \'exit\' to go back.'))
+        for chapter in self.chapters:
+            print(utils.center_text(f'{chapter.number}. {chapter.title}'))
+            str = input()
+            if str == 'exit':
+                return
+        print('No more chapters to list.')
+        time.sleep(3)
+        return
+            
 def scrape_page(url):
     r = requests.get(url)
     r.encoding = 'utf-8' # Force Encoding

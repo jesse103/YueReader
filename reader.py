@@ -86,5 +86,5 @@ def read(book, chapter):
         if number != (book.chapter_count-1):
             next_chapter = book.chapters[number]
             read(book, next_chapter)
-    except:
-        pass
+    except Exception as ex:
+        print(ex)

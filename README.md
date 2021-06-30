@@ -20,6 +20,11 @@ All you have to do now is install the packages needed:
 
 Now you can run `main.py`!
 
+# Reader Commands
+- next | Goes to next chapter.
+- prev | Goes to previous chapter.
+- jump [number] | Jump to a specified chapter.
+
 # To-Do
 - [ ] Clean codebase, add more comments
 - [ ] Reader command handler

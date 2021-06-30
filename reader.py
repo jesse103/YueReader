@@ -17,23 +17,37 @@ commands = {
     'prev': {
         'info': 'Goes to the previous chapter if it exists.',
         'returns': True
+    },
+    'jump': {
+        'info': 'Jump to specified chapter if it exists.',
+        'returns': True
     }
 }
 
 def handle_command(book, chapter, command): # TODO: command handler
-    if command == 'next':
+    args = command.split(' ')
+    command_name = args[0]
+
+    print(f'args: {str(args)}')
+
+    if command_name == 'next':
         if chapter.number < book.chapter_count:
             next_chapter = book.chapters[chapter.number]
             read(book, next_chapter)
-    elif command == 'prev':
+    elif command_name == 'prev':
         if (chapter.number-2) > 0:
             previous_chapter = book.chapters[chapter.number-2]
             read(book, previous_chapter)
+    elif command_name == 'jump':
+        number = int(args[1])
+        if number > 0 and number <= book.chapter_count:
+            specified_chapter = book.chapters[number-1]
+            read(book, specified_chapter)
 
 def read(book, chapter):
     utils.clear_screen()
 
-    print(utils.center_text('Press enter to scroll down, or type \'exit\' to go back.'))
+    print(utils.center_text('Press enter to scroll down, or type \'exit\' to go back. Check the github page for a list of commands'))
     
     try:
         done = False
@@ -59,7 +73,7 @@ def read(book, chapter):
                     return
                 elif len(command) > 1:
                     try:
-                        command_data = commands[command]
+                        command_data = commands[command.split(' ')[0]]
                         if command_data['returns']: # bad little hack here, fix and ily
                             return handle_command(book, chapter, command)
                         else:

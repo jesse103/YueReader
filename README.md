@@ -25,9 +25,5 @@ Now you can run `main.py`!
 - prev | Goes to previous chapter.
 - jump [number] | Jump to a specified chapter.
 
-# To-Do
-- [ ] Clean codebase, add more comments
-- [ ] Reader command handler
-
 # Sites in use
 https://lightnovel.world

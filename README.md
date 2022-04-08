@@ -1,5 +1,7 @@
 ![Moon](images/moon.png)
 
+# UPDATE: THIS PROJECT IS GOING TO BE REWRITTEN ENTIRELY
+
 # Yuè Reader
 Yuè Reader is a cross-platform in-terminal cn/jp/ko webnovel reader.
 

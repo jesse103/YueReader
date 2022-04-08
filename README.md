@@ -1,5 +1,4 @@
 ![Moon](images/moon.png)
-
 # UPDATE: THIS PROJECT IS GOING TO BE REWRITTEN ENTIRELY
 
 # Yuè Reader

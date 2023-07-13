@@ -6,8 +6,6 @@ Yuè Reader is a cross-platform in-terminal cn/jp/ko webnovel reader.
 
 Any pull requests are highly appreciated!
 
-[Discord Server](https://discord.gg/vsJMcPdVBt)
-
 # Features
 - Discord Rich Presence support
 - Download all chapters
